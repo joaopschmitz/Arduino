@@ -14,23 +14,23 @@
 
 #define GAS_CO 0  
 #define GAS_NH4 1
-#define SMOKE 2
+#define GAS_C02 2
 
 DHT dht(PIN_DHT11, DHTTYPE);
 
-float COCurve[3]  =  {1,0.46,-0.24};   //curva CO aproximada baseada na sensibilidade descrita no datasheet {x,y,deslocamento} baseada em dois pontos 
+float COCurve[3]  =  {1.0,0.46,-0.24};   //curva CO aproximada baseada na sensibilidade descrita no datasheet {x,y,deslocamento} baseada em dois pontos 
                                           //p1: (log10, log2.9), p2: (log200, log1.4)
                                           //inclinacao = (Y2-Y1)/(X2-X1)
                                           //vetor={x, y, inclinacao}
 
-float NH4Curve[3]  =  {1,0.41,-0.40};    //curva NH4 aproximada baseada na sensibilidade descrita no datasheet {x,y,deslocamento} baseada em dois pontos 
+float NH4Curve[3]  =  {1.0,0.41,-0.40};    //curva NH4 aproximada baseada na sensibilidade descrita no datasheet {x,y,deslocamento} baseada em dois pontos 
                                           //p1: (log10, log2.6), p2(log200, log0.78)
                                           //inclinacao = (Y2-Y1)/(X2-X1)
                                           //vetor={x, y, inclinacao}
                                                    
                                                     
-float SmokeCurve[3] ={2.3,0.53,-0.44};    //curva LPG aproximada baseada na sensibilidade descrita no datasheet {x,y,deslocamento} baseada em dois pontos 
-                                          //p1: (log200, 0.53), p2: (log10000, -0.22)
+float C02Curve[3] ={1.0,0.38,-0.37};    //curva C02 aproximada baseada na sensibilidade descrita no datasheet {x,y,deslocamento} baseada em dois pontos 
+                                          //p1: (log10, log2.4), p2: (log200, log0.8)
                                           //inclinacao = (Y2-Y1)/(X2-X1)
                                           //vetor={x, y, inclinacao}
                                           
@@ -66,8 +66,8 @@ void loop()
    Serial.print("CO:"); 
    Serial.print(getQuantidadeGasMQ(leitura_MQ2(PIN_MQ135)/Ro,GAS_CO) );
    Serial.print( "ppm    " );
-   Serial.print("SMOKE:"); 
-   Serial.print(getQuantidadeGasMQ(leitura_MQ2(PIN_MQ135)/Ro,SMOKE) );
+   Serial.print("C02:"); 
+   Serial.print(getQuantidadeGasMQ(leitura_MQ2(PIN_MQ135)/Ro,GAS_C02) );
    Serial.print( "ppm    " );
    Serial.println("");
    delay(200);
@@ -116,7 +116,7 @@ int getQuantidadeGasMQ(float rs_ro, int gas_id)
   } else if ( gas_id == 1 ) {
      return calculaGasPPM(rs_ro,COCurve);
   } else if ( gas_id == 2 ) {
-     return calculaGasPPM(rs_ro,SmokeCurve);
+     return calculaGasPPM(rs_ro,C02Curve);
   }    
 
   return 0;
@@ -126,4 +126,3 @@ int  calculaGasPPM(float rs_ro, float *pcurve) //Rs/R0 é fornecido para calcula
 {
   return (pow(10,( ((log(rs_ro)-pcurve[1])/pcurve[2]) + pcurve[0])));
 }
-
