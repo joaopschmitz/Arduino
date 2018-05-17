@@ -1,5 +1,3 @@
-#include "DHT.h"
-
 #define PIN_MQ135 A0 //define pin sensor MQ-135
 
 #define VRL_VALOR 20000 //resistência de carga RL
