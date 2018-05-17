@@ -29,7 +29,7 @@ void setup()
 void loop()
 {
    Serial.print("CO:"); 
-   Serial.print(getQuantidadeGasMQ(leitura_MQ2(PIN_MQ135)/Ro);
+   Serial.print(getQuantidadeGasMQ(leitura_MQ2(PIN_MQ135)/Ro));
    Serial.print( "ppm    " );
    delay(200);
 }
